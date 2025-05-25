@@ -1,47 +1,63 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HeroComponent from '../components/HeroComponent';
 import { Search } from 'lucide-react';
+import type { Category, Meal } from '../interfaces/interfaces';
+import MealsListComponent from '../components/MealsListComponent';
 
 const HomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Beef');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const menuOptions = [
-    {
-      id: 1,
-      name: 'Beef',
-      img: '/img/beef.png',
-    },
-    {
-      id: 2,
-      name: 'Chicken',
-      img: '/img/chicken.png',
-    },
-    {
-      id: 3,
-      name: 'Dessert',
-      img: '/img/dessert.png',
-    },
-    {
-      id: 4,
-      name: 'Lamb',
-      img: '/img/lamb.png',
-    },
-    {
-      id: 5,
-      name: 'Miscellaneous',
-      img: '/img/miscellaneous.png',
-    },
-    {
-      id: 6,
-      name: 'Pasta',
-      img: '/img/pasta.png',
-    },
-  ];
+  const [foundedMeals, setFoundedMeals] = useState<Meal[]>([]);
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
   };
+
+  const getAllCategories = async () => {
+    try {
+      const response = await fetch(
+        'https://www.themealdb.com/api/json/v1/1/categories.php'
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data.categories);
+      } else {
+        throw new Error();
+      }
+    } catch {
+      console.error('Error');
+    }
+  };
+
+  const getAllMealsByCategory = async (category: string) => {
+    try {
+      console.info(`www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
+      const response = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setFoundedMeals(data.meals);
+      } else {
+        throw new Error();
+      }
+    } catch {
+      console.error('Error');
+    }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory !== '') {
+      getAllMealsByCategory(selectedCategory);
+    }
+  }, [selectedCategory]);
 
   return (
     <>
@@ -52,26 +68,27 @@ const HomePage = () => {
           <h2 className='text-white text-2xl font-medium mb-6'>Categories</h2>
 
           <div>
-            {menuOptions.map((option) => (
-              <div
-                key={option.id}
-                className={`relative border border-gray-400/40 rounded-xl py-3 overflow-hidden mb-4 cursor-pointer ${
-                  selectedCategory == option.name
-                    ? 'bg-amber-400 text-primary'
-                    : 'text-white'
-                }`}
-                onClick={() => handleCategoryClick(option.name)}
-              >
-                <span className='text-sm font-semibold ms-16'>
-                  {option.name}
-                </span>
-                <img
-                  src={option.img}
-                  alt={option.name}
-                  className='absolute -left-8 top-1/2 -translate-y-1/2 w-20'
-                />
-              </div>
-            ))}
+            {categories.length > 0 &&
+              categories.map((category) => (
+                <div
+                  key={category.idCategory}
+                  className={`relative border border-gray-400/40 rounded-xl py-3 overflow-hidden mb-4 cursor-pointer ${
+                    selectedCategory == category.strCategory
+                      ? 'bg-amber-400 text-primary'
+                      : 'text-white'
+                  }`}
+                  onClick={() => handleCategoryClick(category.strCategory)}
+                >
+                  <span className='text-sm font-semibold ms-16'>
+                    {category.strCategory}
+                  </span>
+                  <img
+                    src={category.strCategoryThumb}
+                    alt={category.strCategory}
+                    className='absolute -left-8 top-1/2 -translate-y-1/2 w-20'
+                  />
+                </div>
+              ))}
           </div>
         </div>
 
@@ -95,6 +112,8 @@ const HomePage = () => {
               <select name='' id=''></select>
             </div>
           </div>
+
+          <MealsListComponent meals={foundedMeals} />
         </div>
       </div>
     </>
