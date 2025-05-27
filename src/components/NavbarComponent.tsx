@@ -5,7 +5,7 @@ const NavbarComponent = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='max-w-7xl mx-auto pt-10 flex justify-between items-center'>
+    <div className='max-w-7xl mx-auto pt-10 flex justify-between items-center mb-9'>
       <div
         className='flex justify-start items-end cursor-pointer'
         onClick={() => navigate('/')}
