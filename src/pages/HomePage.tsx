@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import HeroComponent from '../components/HeroComponent';
 import { Search } from 'lucide-react';
-import type { Category, Meal } from '../interfaces/interfaces';
+import type { Category, Recipe } from '../interfaces/interfaces';
 import MealsListComponent from '../components/MealsListComponent';
 
 const HomePage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [foundedMeals, setFoundedMeals] = useState<Meal[]>([]);
+  const [foundedMeals, setFoundedMeals] = useState<Recipe[]>([]);
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -33,7 +33,6 @@ const HomePage = () => {
 
   const getAllMealsByCategory = async (category: string) => {
     try {
-      console.info(`www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
       const response = await fetch(
         `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
       );
@@ -93,7 +92,7 @@ const HomePage = () => {
         </div>
 
         <div className='col-span-3'>
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-center mb-8'>
             <div className='relative text-gray-400 w-1/2'>
               <input
                 type='text'

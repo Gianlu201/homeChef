@@ -1,8 +1,8 @@
-import type { Meal } from '../interfaces/interfaces';
+import type { Recipe } from '../interfaces/interfaces';
 import MealCardComponent from './MealCardComponent';
 
 interface MealsListProps {
-  meals: Meal[];
+  meals: Recipe[];
 }
 
 const MealsListComponent = ({ meals }: MealsListProps) => {
