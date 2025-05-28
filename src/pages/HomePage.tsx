@@ -6,9 +6,13 @@ import MealsListComponent from '../components/MealsListComponent';
 
 const HomePage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('Beef');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [foundedMeals, setFoundedMeals] = useState<Recipe[]>([]);
+  const [filteredFoundedMelas, setFilteredFoundedMelas] = useState<Recipe[]>(
+    []
+  );
+  const [sortBy, setSortBy] = useState<string>('name');
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -40,12 +44,28 @@ const HomePage = () => {
       if (response.ok) {
         const data = await response.json();
         setFoundedMeals(data.meals);
+
+        filterMeals(data.meals, searchQuery);
       } else {
         throw new Error();
       }
     } catch {
       console.error('Error');
     }
+  };
+
+  const filterMeals = (meals: Recipe[], query: string) => {
+    const filteredArray = meals.filter((meal) =>
+      meal.strMeal.toLowerCase().includes(query.toLocaleLowerCase())
+    );
+
+    if (sortBy === 'id') {
+      filteredArray.sort((a, b) => a.idMeal - b.idMeal);
+    } else {
+      filteredArray.sort((a, b) => a.strMeal.localeCompare(b.strMeal));
+    }
+
+    setFilteredFoundedMelas(filteredArray);
   };
 
   useEffect(() => {
@@ -56,13 +76,19 @@ const HomePage = () => {
     if (selectedCategory !== '') {
       getAllMealsByCategory(selectedCategory);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
+
+  useEffect(() => {
+    filterMeals(foundedMeals, searchQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, sortBy]);
 
   return (
     <>
       <HeroComponent />
 
-      <div className='max-w-7xl mx-auto grid grid-cols-4 gap-10 pt-6'>
+      <div className='max-w-7xl mx-auto grid grid-cols-4 gap-10 pt-6 pb-20'>
         <div>
           <h2 className='text-white text-2xl font-medium mb-6'>Categories</h2>
 
@@ -107,12 +133,22 @@ const HomePage = () => {
             </div>
 
             <div className='bg-white text-lg text-primary font-bold rounded-full py-2 px-5'>
-              <span>Sort by: </span>
-              <select name='' id=''></select>
+              <label htmlFor='sort'>Sort by: </label>
+              <select
+                id='sort'
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className='focus:outline-none focus:ring-0'
+              >
+                <option value='name'>Name</option>
+                <option value='id'>Id</option>
+              </select>
             </div>
           </div>
 
-          <MealsListComponent meals={foundedMeals} />
+          <div>
+            <MealsListComponent meals={filteredFoundedMelas} />
+          </div>
         </div>
       </div>
     </>
