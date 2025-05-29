@@ -17,7 +17,7 @@ const DetailsPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.info(data.meals[0]);
+
         setRecipe(data.meals[0]);
         getIngredientsList(data.meals[0]);
       } else {
