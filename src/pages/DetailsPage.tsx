@@ -59,7 +59,7 @@ const DetailsPage = () => {
     <div>
       <NavbarComponent />
 
-      <div className='max-w-2xl mx-auto flex flex-col items-center text-white'>
+      <div className='max-md:px-4 max-w-2xl mx-auto flex flex-col items-center text-white'>
         {recipe && (
           <>
             <img
@@ -73,12 +73,12 @@ const DetailsPage = () => {
             </h1>
 
             <div className='self-start flex justify-start items-center gap-4 mb-8'>
-              <p className='bg-gray-700 px-3 py-1.5 rounded-full'>
+              <p className='text-sm xs:text-base bg-gray-700 px-3 py-1.5 rounded-full'>
                 Category:{' '}
                 <span className='font-bold'>{recipe.strCategory}</span>
               </p>
 
-              <p className='bg-gray-700 px-3 py-1.5 rounded-full'>
+              <p className='text-sm xs:text-base bg-gray-700 px-3 py-1.5 rounded-full'>
                 Area: <span className='font-bold'>{recipe.strArea}</span>
               </p>
             </div>
@@ -91,7 +91,10 @@ const DetailsPage = () => {
 
             <ul className='self-start mb-14'>
               {ingredientsList.map((ingredient, i) => (
-                <li key={i} className='list-disc ms-10 mb-1'>
+                <li
+                  key={i}
+                  className='text-sm xs:text-base list-disc ms-10 mb-1'
+                >
                   {ingredient}
                 </li>
               ))}
@@ -105,7 +108,7 @@ const DetailsPage = () => {
 
             <div className='text-pretty mb-10'>
               {recipe.strInstructions.split('\r\n').map((phrase, i) => (
-                <p key={i} className='mb-4'>
+                <p key={i} className='text-sm xs:text-base mb-4'>
                   {phrase}
                 </p>
               ))}
@@ -113,18 +116,16 @@ const DetailsPage = () => {
 
             {/* YouTube tutorial */}
             <iframe
-              width='560'
-              height='315'
               src={getYoutubeEmbedUrl(recipe.strYoutube)}
               title='YouTube video player'
               frameBorder='0'
               allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
               referrerPolicy='strict-origin-when-cross-origin'
               allowFullScreen
-              className='rounded-2xl mb-30'
+              className='rounded-2xl mb-30 w-full aspect-16/9 max-w-[560px] max-h-[315h]'
             ></iframe>
 
-            <h4 className='text-sm mb-6'>
+            <h4 className='text-xs xs:text-sm mb-6'>
               Discover more about:{' '}
               <a
                 href={recipe.strSource}

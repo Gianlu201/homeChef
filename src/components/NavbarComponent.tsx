@@ -10,12 +10,12 @@ const NavbarComponent = () => {
         className='flex justify-start items-end cursor-pointer'
         onClick={() => navigate('/')}
       >
-        <ChefHat className='text-primary fill-white stroke-1 w-12 h-12' />
+        <ChefHat className='text-primary fill-white stroke-1 w-10 h-10 xs:w-12 xs:h-12' />
         <span className='text-white text-sm inline-block pb-1'>HomeChef</span>
       </div>
 
       <button
-        className='text-primary bg-white text-lg font-bold rounded-full ps-4 pe-6 py-2 flex justify-center items-center gap-2 cursor-pointer'
+        className='text-primary bg-white text-xs xs:text-lg font-bold rounded-full ps-3 xs:ps-4 pe-5 xs:pe-6 py-1 xs:py-2 flex justify-center items-center md:gap-2 cursor-pointer'
         onClick={() => navigate('/')}
       >
         <ChevronLeft />

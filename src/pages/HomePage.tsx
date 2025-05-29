@@ -101,9 +101,11 @@ const HomePage = () => {
     <>
       <HeroComponent />
 
-      <div className='max-w-7xl mx-auto grid grid-cols-4 gap-10 pt-6 pb-20'>
+      <div className='max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 pt-6 pb-20 px-3 xl:px-0'>
         <div>
-          <h2 className='text-white text-2xl font-medium mb-6'>Categories</h2>
+          <h2 className='text-white 3xl:text-2xl font-medium mb-6'>
+            Categories
+          </h2>
 
           <div>
             {categories.length > 0 &&
@@ -117,35 +119,35 @@ const HomePage = () => {
                   }`}
                   onClick={() => handleCategoryClick(category.strCategory)}
                 >
-                  <span className='text-sm font-semibold ms-16'>
+                  <span className='text-xs lg:text-sm font-semibold ms-10 sm:ms-16'>
                     {category.strCategory}
                   </span>
                   <img
                     src={category.strCategoryThumb}
                     alt={category.strCategory}
-                    className='absolute -left-8 top-1/2 -translate-y-1/2 w-20'
+                    className='absolute -left-8 top-1/2 -translate-y-1/2 w-16 sm:w-20'
                   />
                 </div>
               ))}
           </div>
         </div>
 
-        <div className='col-span-3'>
+        <div className='col-span-1 md:col-span-3'>
           <div className='flex justify-between items-center mb-8'>
-            <div className='relative text-gray-400 w-1/2'>
+            <div className='relative text-gray-400 w-full md:w-1/2'>
               <input
                 type='text'
                 placeholder='Search recipes and more'
-                className='border border-gray-400/40 rounded-full w-full focus:outline-none focus:ring-0 focus:border-white py-3 ps-16'
+                className='text-xs sm:text-sm md:text-base border border-gray-400/40 rounded-full w-full focus:outline-none focus:ring-0 focus:border-white py-3 ps-8 sm:ps-10 md:ps-16'
                 value={searchQuery}
                 onChange={(e) => {
                   dispatch(setSearchQuery(e.target.value));
                 }}
               />
-              <Search className='absolute top-1/2 left-4 -translate-y-1/2 w-6 h-6' />
+              <Search className='absolute top-1/2 left-4 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6' />
             </div>
 
-            <div className='bg-white text-lg text-primary font-bold rounded-full py-2 px-5'>
+            <div className='hidden md:block bg-white text-lg text-primary font-bold rounded-full py-2 px-5'>
               <label htmlFor='sort'>Sort by: </label>
               <select
                 id='sort'
