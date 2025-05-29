@@ -3,19 +3,32 @@ import HeroComponent from '../components/HeroComponent';
 import { Search } from 'lucide-react';
 import type { Category, Recipe } from '../interfaces/interfaces';
 import MealsListComponent from '../components/MealsListComponent';
+import type { RootState, AppDispatch } from '../app/store';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setSelectedCategory, setSearchQuery } from '../features/features';
 
 const HomePage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('Beef');
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [foundedMeals, setFoundedMeals] = useState<Recipe[]>([]);
   const [filteredFoundedMelas, setFilteredFoundedMelas] = useState<Recipe[]>(
     []
   );
   const [sortBy, setSortBy] = useState<string>('name');
 
+  // const [selectedCategory, setSelectedCategory] = useState<string>('Beef');
+  // const [searchQuery, setSearchQuery] = useState<string>('');
+  const selectedCategory = useSelector(
+    (state: RootState) => state.globalState.selectedCategory
+  );
+  const searchQuery = useSelector(
+    (state: RootState) => state.globalState.searchQuery
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+
   const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category);
+    dispatch(setSelectedCategory(category));
   };
 
   const getAllCategories = async () => {
@@ -126,7 +139,7 @@ const HomePage = () => {
                 className='border border-gray-400/40 rounded-full w-full focus:outline-none focus:ring-0 focus:border-white py-3 ps-16'
                 value={searchQuery}
                 onChange={(e) => {
-                  setSearchQuery(e.target.value);
+                  dispatch(setSearchQuery(e.target.value));
                 }}
               />
               <Search className='absolute top-1/2 left-4 -translate-y-1/2 w-6 h-6' />
@@ -147,7 +160,13 @@ const HomePage = () => {
           </div>
 
           <div>
-            <MealsListComponent meals={filteredFoundedMelas} />
+            {filteredFoundedMelas.length > 0 ? (
+              <MealsListComponent meals={filteredFoundedMelas} />
+            ) : (
+              <h3 className='text-gray-300 text-2xl text-center pt-10'>
+                No recipes found..
+              </h3>
+            )}
           </div>
         </div>
       </div>
